@@ -576,16 +576,16 @@ $slider_color: if($variant == 'light', $accent_color, white);
     box-shadow: none;
   }
 
-//  .popup-sub-menu .popup-menu-item {
-//    &:ltr { /* 8px spacing + 2*4px padding */
-//          padding-left: 8px;
-//          padding-right: 24px;
-//    }
-//    &:rtl { /* 8px spacing + 2*4px padding */
-//          padding-left: 24px;
-//          padding-right: 8px;
-//    }
-//  }
+  // .popup-sub-menu .popup-menu-item {
+  //   &:ltr { /* 8px spacing + 2*4px padding */
+  //         padding-left: 8px;
+  //         padding-right: 24px;
+  //   }
+  //   &:rtl { /* 8px spacing + 2*4px padding */
+  //         padding-left: 24px;
+  //         padding-right: 8px;
+  //   }
+  // }
 
   .popup-menu-content { padding: 6px 0; margin: 0 4px; }
   .popup-menu-item {
@@ -646,78 +646,78 @@ $slider_color: if($variant == 'light', $accent_color, white);
   }
 }
 
-  .popup-menu-ornament {
-    text-align: right;
-    width: 16px;
-    height: 16px;
-  }
+.popup-menu-ornament {
+  text-align: right;
+  width: 16px;
+  height: 16px;
+}
 
-  .popup-menu-boxpointer,
-  .candidate-popup-boxpointer {
-    -arrow-border-radius: 0;
-    -arrow-background-color: transparent;
-    -arrow-border-width: 0;
-    -arrow-border-color: transparent;
-    -arrow-base: 0;
-    -arrow-rise: 0;
-    -arrow-box-shadow: none; //dreaming. bug #689995
-    margin: 2px 6px 6px;
-    background-color: $menu_bg_color;
-    border-radius: $material_radius;
-    box-shadow: $shadow_2;
-  }
+.popup-menu-boxpointer,
+.candidate-popup-boxpointer {
+  -arrow-border-radius: 0;
+  -arrow-background-color: transparent;
+  -arrow-border-width: 0;
+  -arrow-border-color: transparent;
+  -arrow-base: 0;
+  -arrow-rise: 0;
+  -arrow-box-shadow: none; //dreaming. bug #689995
+  margin: 2px 6px 6px 6px;
+  background-color: $menu_bg_color;
+  border-radius: $material_radius;
+  box-shadow: $shadow_2;
+}
 
-  .popup-separator-menu-item {
-    height: 1px; //not really the whole box
-    margin: 0 0;
-    background-color: $border_color;
-    border-color: transparent;
-    border-bottom-width: 0;
-    border-bottom-style: solid;
-  }
+.popup-separator-menu-item {
+  height: 1px; //not really the whole box
+  margin: 0 0;
+  background-color: $border_color;
+  border-color: transparent;
+  border-bottom-width: 0;
+  border-bottom-style: solid;
+}
 
-  // a little unstructured mess:
+// a little unstructured mess:
 
-  .system-switch-user-submenu-icon.user-icon {
-    icon-size: 20px;
-    padding: 0 2px;
-  }
-  .system-switch-user-submenu-icon.default-icon {
-    icon-size: 16px;
-    padding: 0 4px;
-  }
+.system-switch-user-submenu-icon.user-icon {
+  icon-size: 20px;
+  padding: 0 2px;
+}
+.system-switch-user-submenu-icon.default-icon {
+  icon-size: 16px;
+  padding: 0 4px;
+}
 
-  #appMenu {
-    spinner-image: url("process-working.svg");
-    spacing: 4px;
+#appMenu {
+  spinner-image: url("process-working.svg");
+  spacing: 4px;
 
-    .label-shadow { color: transparent; }
-  }
+  .label-shadow { color: transparent; }
+}
 
-  // system status popover menu
-  .aggregate-menu {
-    min-width: 240px;
+// system status popover menu
+.aggregate-menu {
+  min-width: 240px;
 
-    .popup-menu-icon { padding: 0 4px; }
-  }
+  .popup-menu-icon { padding: 0 4px; }
+}
 
-  .system-menu-action {
-    color: $secondary_fg_color;
-    border-radius: 100px; /* wish we could do 50% */
-    padding: ($large_size - 20px) / 2;
+.system-menu-action {
+  color: $secondary_fg_color;
+  border-radius: 100px; /* wish we could do 50% */
+  padding: ($large_size - 20px) / 2;
+  border: none;
+  -st-icon-style: symbolic; // >= 3.29.90
+
+  &:hover, &:focus {
+    background-color: $divider_color;
+    color: $fg_color;
     border: none;
-    -st-icon-style: symbolic; // >= 3.29.90
-
-    &:hover, &:focus {
-      background-color: $divider_color;
-      color: $fg_color;
-      border: none;
-      padding: ($large_size - 20px) / 2;
-    }
-    &:active { background-color: $track_color; color: $fg_color; }
-
-    & > StIcon { icon-size: 16px; }
+    padding: ($large_size - 20px) / 2;
   }
+  &:active { background-color: $track_color; color: $fg_color; }
+
+  & > StIcon { icon-size: 16px; }
+}
 
 // Background menu
 .background-menu { -boxpointer-gap: 8px; -arrow-rise: 0; }
@@ -1386,23 +1386,31 @@ $slider_color: if($variant == 'light', $accent_color, white);
 //close buttons
 
 .window-close {
-  transition-duration: 0ms; // FIXME: unless disable the transition, button will distort when hovering
-  height: $medium_size;
-  width: $medium_size;
-  -shell-close-overlap: $medium_size / 2;
-  -st-background-image-shadow: $shadow_1;
+  background-size: 26px;
+  height: 26px;
+  width: 26px;
+  -shell-close-overlap: 10px;
+  border-radius: 100px;
+  border: 0 none transparent;
+  background-color: transparent;
+  color: transparent;
+  box-shadow: none;
+  StIcon { icon-size: 26px; } // for safety
   background-image: url("assets/window-close.svg");
-  background-size: $medium_size;
 
   &:hover {
-    -st-background-image-shadow: $shadow_2;
-    background-image: url("assets/window-close.svg");
+    background-size: 26px;
+    height: 26px;
+    width: 26px;
+    background-image: url("assets/window-close-hover.svg");
   }
-  &:active { background-image: url("assets/window-close-active.svg"); }
 
-  // For backward compatibility of 3.26.0
-  &:rtl { -st-background-image-shadow: $shadow_1; }
-  &:rtl:hover { -st-background-image-shadow: $shadow_2; }
+  &:active {
+    background-size: 26px;
+    height: 26px;
+    width: 26px;
+    background-image: url("assets/window-close-active.svg");
+  }
 }
 
 /* NETWORK DIALOGS */
@@ -1671,9 +1679,10 @@ $slider_color: if($variant == 'light', $accent_color, white);
 
   .show-apps {
     & .overview-icon {
-    background-image: url("assets/startup.png") !important;
-    background-size: contain;
-   }
+      // background-image: url("assets/startup.svg");
+      // background-size: contain;
+      color: transparent;
+    }
   }
 
   .app-well-app-running-dot { //running apps indicator
@@ -1698,6 +1707,8 @@ $slider_color: if($variant == 'light', $accent_color, white);
 
   .show-apps .show-apps-icon {
     color: transparent;
+    background-image: url("assets/startup.svg");
+    background-size: contain;
   }
 
   .show-apps:hover .show-apps-icon,
@@ -1730,7 +1741,12 @@ $slider_color: if($variant == 'light', $accent_color, white);
       width: 12px;
       height: 12px;
       border-radius: 12px;
+      margin: 0;
+      padding: 0;
       background-image: none;
+      color: transparent;
+      border: none;
+      box-shadow: none;
       background-color: $inverse_disabled_secondary_fg_color;
     }
     &:hover .page-indicator-icon {
@@ -1738,7 +1754,12 @@ $slider_color: if($variant == 'light', $accent_color, white);
       background-color: $inverse_disabled_fg_color;
     }
     &:active .page-indicator-icon {
+      margin: 0;
+      padding: 0;
       background-image: none;
+      color: transparent;
+      border: none;
+      box-shadow: none;
       background-color: $inverse_secondary_fg_color;
     }
     &:checked .page-indicator-icon {
@@ -1765,8 +1786,8 @@ $slider_color: if($variant == 'light', $accent_color, white);
     padding: 16px;
     border-radius: $material_radius;
     margin: 6px;
-    //border-width: 0; //fixme: can't have non unoform borders :(
-//    &:rtl { border-radius: $material_radius; }
+    // border-width: 0; //fixme: can't have non unoform borders :(
+    // &:rtl { border-radius: $material_radius; }
   }
   .workspace-thumbnail-indicator {
     border: 0 solid $primary_color;
