@@ -64,6 +64,16 @@ radio-unchecked-insensitive-dark
 radio-mixed-dark
 radio-mixed-insensitive-dark
 
+entry
+entry-dark
+entry-disabled
+entry-disabled-dark
+entry-focus
+entry-focus-dark
+
+header-entry
+header-entry-disabled
+
 setting
 setting-dark
 

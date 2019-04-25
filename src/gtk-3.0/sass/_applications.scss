@@ -12,20 +12,16 @@ terminal-window notebook {
 // GNOME Terminal, MATE Terminal
 //
 
-terminal-window,
-.mate-terminal {
-  notebook {
-    > header.top {
-      tabs > tab { border-top: 1px solid transparent; }
-
-      button {
-        padding: 0;
-        min-width: 24px;
-        min-height: 24px;
-      }
-    }
-  }
-}
+// terminal-window,
+// .mate-terminal {
+//   > box.vertical > notebook, notebook {
+//     > header.top {
+//       > tabs > tab {
+//         border-top: 1px solid transparent;
+//       }
+//     }
+//   }
+// }
 
 //
 // Nautilus
@@ -33,9 +29,6 @@ terminal-window,
 
 %pathbar_box_button {
   // min-height: if($variant == 'light', 24px, 26px);
-  padding-top: 0;
-  padding-bottom: 0;
-  margin: 0 0 0 -5px;
   border-radius: 0;
   border: 1px solid rgba(black, 0.2);
   border-right-style: none;
@@ -83,6 +76,9 @@ terminal-window,
 
       button.flat.text-button.toggle,
       button.flat.image-button.text-button.toggle {
+        padding-top: 0;
+        padding-bottom: 0;
+        margin: 0 0 0 -5px;
         @extend %pathbar_box_button;
 
         @if $variant == 'light' {
@@ -127,6 +123,27 @@ terminal-window,
 
         &:checked {
           border-radius: $bt_radius $bt_radius $bt_radius $bt_radius;
+        }
+      }
+    }
+
+    .linked.nautilus-path-bar { // for ≥ 3.31.90
+      button.text-button,
+      button.image-button.text-button {
+        margin-top: 0;
+        margin-bottom: 0;
+        min-height: if($variant == 'light', 24px, 26px);
+
+        &:not(:only-child):last-child {
+          @include button(header-checked);
+          background-clip: if($darker=='false' and $variant=='light', border-box, padding-box);
+          transition: $button_transition;
+          transition-duration: 300ms;
+          &:hover { background-image: none; }
+
+          @if $variant == 'light' {
+            box-shadow: -1px 0 mix(black, $header_button_checked_bg, 10%);
+          }
         }
       }
     }
@@ -388,14 +405,18 @@ $disk_space_free: darken($bg_color, 3%);
 
     entry {
       @extend %headerbar_entrys;
-      margin-top: 4px;
-      margin-bottom: 4px;
+      margin-top: if($variant=='light', 2px, 1px);
+      margin-bottom: if($variant=='light', 2px, 1px);
+      margin-left: 0;
+      margin-right: 0;
+      padding: 2px 10px;
     }
 
     .linked.raised > button {
       @extend %linked_header;
       @extend %outline_dashed;
       min-height: 0;
+      border-right: 1px solid $header_button_border;
 
       @if $variant == 'light' {
         &:not(:first-child) {
@@ -423,6 +444,7 @@ $disk_space_free: darken($bg_color, 3%);
         padding-top: 0;
         padding-bottom: 0;
         @extend %outline_dashed;
+        border-right: 1px solid $header_button_border;
 
         &, &:hover, &:active, &:checked, &:disabled {
           @extend %linked_header;
@@ -876,6 +898,39 @@ configurationview {
   }
 }
 
+window.org-gnome-Builder.workspace > popover.dzlmenubutton {
+  > box.vertical > dzlmenubuttonsection.vertical {
+    > box.vertical > button.dzlmenubuttonitem {
+      color: $alt_fg_color;
+
+      &:active, &:checked {
+        color: $fg_color;
+        background-color: rgba($fg_color, 0.25);
+      }
+
+      > box.horizontal > box.horizontal {
+        > label.title {
+          color: $fg_color;
+        }
+      }
+    }
+  }
+}
+
+window.org-gnome-Builder.workspace > stack#titlebar_container.titlebar {
+  > headerbar > omnibar {
+    > .linked > entry {
+      min-height: 0;
+
+      > overlay > box.horizontal > box.vertical.pan {
+        > button {
+          min-height: 0;
+        }
+      }
+    }
+  }
+}
+
 //
 //  Gnome-Logs
 //
@@ -1025,6 +1080,39 @@ button.documents-favorite:active:hover {
 //
 // Gnome Tweak Tool ( Gnome tweaks )
 //
+row#Focus,
+row#ClickMethod,
+row#StaticWorkspaceTweak, // for 3.26.0
+row#dynamic-workspaces,
+row#PrimaryWorkspaceTweak, // for 3.26.0
+row#workspaces-only-on-primary {
+  padding: 0;
+  border: 1px solid $borders_color;
+
+  row:not(:last-child) { border-bottom: 1px solid $borders_color; }
+
+  &.tweak > list {
+    margin-top: -3px;
+  }
+}
+
+// Add more spaces between title and list
+row#Focus,
+row#ClickMethod,
+row#PrimaryWorkspaceTweak, // for 3.26.0
+row#workspaces-only-on-primary { margin-top: 4px; }
+
+row#AutostartTitle.tweak {
+  padding: 3px;
+  background-color: $base_color;
+}
+
+list#AutostartListBoxTweakGroup {
+  &.tweak-group-startup {
+    border: 1px solid $borders_color;
+  }
+}
+
 .tweak-categories,
 .tweak-category:not(:selected):not(:hover) {
   background-image: _solid($base_color);
@@ -1047,62 +1135,67 @@ dialog.csd > headerbar.titlebar { > switch { margin: 8px 0; } }
 //
 //  Gnome Control Center
 //
-window.background.csd > stack {
-  border-radius: 0 0 $wm_radius $wm_radius;
-}
-
-stack.background { background: none; }
-
-window.background.csd > headerbar.titlebar > box.horizontal > separator.sidebar,
-window.background.csd > headerbar.titlebar > hdyleaflet > separator.sidebar {
-  border-right: none;
-  background: none;
-  min-width: 0;
-  // box-shadow: inset 0 -1px $header_border;
-}
-
-box.horizontal > separator.sidebar,
-hdyleaflet > separator.sidebar {
-  background: none;
-  min-width: 0;
-  border-right-color: if($variant=='light', $borders_color, $header_border);
-}
-
 window.background.csd {
+  > headerbar.titlebar > box.horizontal > separator.sidebar, // > 3.22
+  > headerbar.titlebar > hdyleaflet > separator.sidebar {
+    border-right: none;
+    background: none;
+    min-width: 0;
+    // box-shadow: inset 0 -1px $header_border;
+  }
+
+  > stack {
+    border-radius: 0 0 $wm_radius $wm_radius;
+  }
+
   > box:not(.titlebar).horizontal > separator.vertical {
     background-color: if($variant=='light', $borders_color, $header_border);
   }
-}
 
-// users section
-// stack > box.vertical > widget > overlay grid.horizontal > stack {
-//   > button.toggle { }
-// }
+  > box.horizontal > stack.background {
+    background: none;
 
-// > 3.25.90
-.background.csd scrolledwindow.view {
-  background-color: $base_color;
-  border-bottom-left-radius: $wm_radius + 1px;
+    > widget {
+      > box.horizontal > box.horizontal > box.vertical {
+        > button { // wallpaper set button
+          &:active {
+            color: $fg_color;
+            background-image: none;
+            background-color: if($variant=='light', darken($button_bg, 15%), lighten($button_bg, 10%));
+            border-color: $dark_borders_color;
+          }
+        }
+      }
+    }
+  }
 
-  > viewport.frame > stack {
-    background-color: transparent;
+  // > 3.25.90
+  > box.horizontal > box.vertical > scrolledwindow.view {
+    background-color: $base_color;
+    border-bottom-left-radius: $wm_radius + 1px;
 
-    > list { // left-pane
+    > viewport.frame > stack {
       background-color: transparent;
 
-      > row.activatable:not(:hover):not(:active):not(:selected) {
+      > list { // left-pane
         background-color: transparent;
+
+        > row.activatable:not(:hover):not(:active):not(:selected) {
+          background-color: transparent;
+        }
       }
     }
   }
 }
 
-box.horizontal.titlebar > headerbar > stack > box.vertical {
-  > .title { margin: 0; }
-  > .subtitle { margin: -3px 0; }
+box.horizontal > separator.sidebar,
+hdyleaflet > separator.sidebar { // reset
+  background: none;
+  min-width: 0;
+  border-right-color: if($variant=='light', $borders_color, $header_border);
 }
 
-dialog.background.csd {
+dialog.background.csd { // wallpaper set dialog
   > headerbar.titlebar {
     > label:not(.title):not(.subtitle) {
       font-weight: 700;
@@ -1174,6 +1267,30 @@ window.background.csd {
 }
 
 //
+// Polari
+//
+stack.view.polari-entry-area {
+  background-color: $bg_color;
+  border-top: 1px solid $borders_color;
+
+  button.popup.flat.toggle.polari-nick-button {
+    &:hover {
+      background-color: rgba($fg_color, 0.15);
+      box-shadow: none;
+      background-image: none;
+    }
+
+    &:active, &:checked {
+      background-color: rgba($fg_color, 0.25);
+      box-shadow: none;
+      background-image: none;
+    }
+  }
+}
+
+stack:disabled.view.polari-entry-area { background-image: image($bg_color); }
+
+//
 // Transmission
 //
 .tr-workarea undershoot,
@@ -1195,54 +1312,49 @@ window.background.csd {
 #gf-osd-window,
 #gf-input-source-popup,
 #gf-candidate-popup {
-    &,
-    &.solid {
-        color: lighten($osd_fg_color, 7%);
-        background-color: $osd_bg_color;
-        border: 1px solid darken($osd_bg_color, 8%);
-        border-radius: 2px;
+  &, &.solid {
+    color: lighten($osd_fg_color, 7%);
+    background-color: $osd_bg_color;
+    border: 1px solid darken($osd_bg_color, 8%);
+    border-radius: 2px;
+  }
+
+  levelbar {
+    block {
+      &.low, &.high, &.full {
+        background-color: $selected_bg_color;
+        border-color: $selected_bg_color;
+      }
+
+      &.empty { background-color: darken($osd_bg_color, 5%); }
     }
 
-    levelbar {
-        block {
-            &.low,
-            &.high,
-            &.full {
-                background-color: $selected_bg_color;
-                border-color: $selected_bg_color;
-            }
-            &.empty {
-                background-color: darken($osd_bg_color, 5%);
-            }
-        }
-        trough {
-            background: none;
-        }
-    } // FIXME still needs button styling
+    trough { background: none; }
+  } // FIXME still needs button styling
 }
 
 #gf-input-source {
-    min-height: 32px;
-    min-width: 40px;
+  min-height: 32px;
+  min-width: 40px;
 
-    &:selected {
-        color: $selected_fg_color;
-        background-color: $selected_bg_color;
-        border-radius: 2px;
-    }
+  &:selected {
+    color: $selected_fg_color;
+    background-color: $selected_bg_color;
+    border-radius: 2px;
+  }
 }
 
 gf-candidate-box {
-    label {
-        padding: 3px;
-    }
+  label {
+    padding: 3px;
+  }
 
-    &:hover,
-    &:selected {
-        color: $selected_fg_color;
-        background-color: $selected_bg_color;
-        border-radius: 2px;
-    }
+  &:hover,
+  &:selected {
+    color: $selected_fg_color;
+    background-color: $selected_bg_color;
+    border-radius: 2px;
+  }
 }
 
  /*************
@@ -2004,6 +2116,8 @@ window.thunar {
   }
 
   > box.linked.raised.horizontal > button.image-button {
+    border-right: 1px solid $header_button_border;
+
     &, &:hover, &:active, &:checked, &:disabled {
       @extend %linked_header;
     }
@@ -2024,9 +2138,9 @@ window.thunar {
   }
 }
 
-.geary-composer-box {
-  entry { margin: 0 2px 2px 2px; }
-}
+// .geary-composer-box {
+//   entry { margin: 0 2px 2px 2px; }
+// }
 
 window#GearyMainWindow.background.csd {
   box.vertical > paned.horizontal > box.sidebar.vertical {
@@ -2043,6 +2157,7 @@ window#GearyMainWindow.background.csd {
     scrolledwindow.geary-conversation-scroller {
       viewport.frame {
         list.conversation-listbox {
+          background: none;
           border-bottom-right-radius: $wm_radius;
         }
       }
@@ -2147,7 +2262,6 @@ window.background:not(.csd) {
 //  *******************/
 
 #MozillaGtkWidget.background {
-
   // blend with weird toolbar backgrounds
   background-color: $bg_color;
 
@@ -2192,7 +2306,7 @@ window.background:not(.csd) {
   }
 
   > widget {
-    border { border-color: $solid_borders_color; }
+    border { border-color: if($variant == 'light', darken($bg_color, 15%), lighten($bg_color, 20%)); }
 
     separator { background-color: $borders_color; }
 
@@ -2219,8 +2333,8 @@ window.background:not(.csd) {
 
 window.background.chromium {
   // checked-tab & toolbar & button widgets
-//  background-color: $bg_color;
-//  color: $text_color;
+  // background-color: $bg_color;
+  // color: $text_color;
 
   headerbar.titlebar {
     button.toggle { // account-button (> 64.0.3282?)
@@ -2558,7 +2672,7 @@ button.flat.-panel-icon-button {
 //
 .menubar.panel {
   .panel {
-    &.color-light {
+    &, &.color-light, &.color-dark {
       background-color: transparent;
       background-image: linear-gradient(0deg, rgba($panel_bottom_color, 0.95) 0%, rgba($panel_top_color, 0.95) 100%);
       border-bottom: 1px solid if($variant == 'light', $panel_border_color, $header_border);
@@ -2568,14 +2682,14 @@ button.flat.-panel-icon-button {
 
     &.maximized {
       background-color: $panel_bg;
-      background-image: linear-gradient(0deg, rgba($panel_bottom_color, 1) 0%, rgba($panel_top_color, 1) 100%);
+      background-image: none;
       border: none;
     }
 
     &.translucent {
-      background-color: transparent;
-      background-image: linear-gradient(0deg, rgba($panel_bottom_color, 0.95) 0%, rgba($panel_top_color, 0.95) 100%);
-      border-bottom: 1px solid if($variant == 'light', $panel_border_color, $header_border);
+      background-color: rgba($panel_bg, 0.75);
+      background-image: none;
+      border: none;
     }
 
     menubar {
@@ -2587,8 +2701,9 @@ button.flat.-panel-icon-button {
 
   popover {
     padding: 2px 4px;
-    border: 1px solid if($variant == 'light', rgba(black, 0.35), rgba(white, 0.10));
-    box-shadow: 0 5px 5px rgba(black, 0.12), 0 5px 15px rgba(black, 0.08);
+    margin: 0 6px 15px 6px;
+    border: 1px solid if($variant == 'light', rgba(black, 0.35), rgba(black, 0.45));
+    box-shadow: 0 3px 5px rgba(black, 0.12), 0 5px 8px rgba(black, 0.08);
 
     button {
       @include button(undecorated);
@@ -2787,15 +2902,15 @@ window.background.csd {
 
 headerbar.titlebar {
   > box.horizontal > entry.pathbar {
-    min-height: 0;
-    padding: 2px 10px;
+    min-height: 20px;
+    padding: 2px 16px;
     margin-top: 2px;
     margin-bottom: 2px;
   }
 
   > button.flat.image-button.toggle {
-    margin-top: 6px;
-    margin-bottom: 6px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 
     &:not(:checked):not(:active) {
       background-clip: if($variant=='light', padding-box, padding-box);
